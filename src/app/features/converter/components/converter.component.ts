@@ -1,7 +1,13 @@
-import { Component, signal } from '@angular/core';
+// Libraries
+import { Component, inject, signal } from '@angular/core';
+
+// Components
 import { FileUploadComponent } from './file-upload.component';
 import { PreviewComponent } from './preview.component';
 import { ResultComponent } from './result.component';
+
+// Services
+import { ApiService } from '../../../core/services/api.service';
 
 @Component({
   selector: 'app-converter',
@@ -27,16 +33,20 @@ import { ResultComponent } from './result.component';
   `,
 })
 export class ConverterComponent {
-    // apiService = inject(ApiService);
+    apiService = inject(ApiService);
     file = signal<File | null>(null);
     convertedFile = signal<string | null>(null);
+    isUploading = false;
 
     setFile(selectedFile: File) {
         this.file.set(selectedFile);
     }
 
-    convertToGif() {
-        // message = this.apiService.getData();
-        this.convertedFile.set('https://media.giphy.com/media/l0HlPjezGYJiHRfyU/giphy.gif');
+    async convertToGif() {
+        this.isUploading = true;
+
+        const data = await this.apiService.convertVideo(this.file()!);
+        if (data?.success) this.convertedFile.set(data?.url);
+        this.isUploading = false;
     }
 }
