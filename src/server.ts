@@ -47,6 +47,11 @@ app.use(
 app.use('/api', apiRouter)
 
 /**
+ * Allow access to outputs folder
+ */
+app.use('/uploads', express.static(process.cwd() + '/uploads'));
+
+/**
  * Handle all other requests by rendering the Angular application.
  */
 app.use('/**', (req, res, next) => {

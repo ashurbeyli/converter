@@ -21,8 +21,10 @@ import { ApiService } from '../../../core/services/api.service';
         <app-preview [file]="file()!"></app-preview>
         <button 
             (click)="convertToGif()" 
-            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer">
-            Convert to GIF
+            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
+            [disabled]="isUploading"
+        >
+            {{isUploading ? 'Converting...' : 'Convert to GIF'}}
         </button>
       }
 
@@ -44,9 +46,8 @@ export class ConverterComponent {
 
     async convertToGif() {
         this.isUploading = true;
-
         const data = await this.apiService.convertVideo(this.file()!);
-        if (data?.success) this.convertedFile.set(data?.url);
+        if (data?.success) this.convertedFile.set(data?.file);
         this.isUploading = false;
     }
 }
