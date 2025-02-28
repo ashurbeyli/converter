@@ -2,10 +2,13 @@ import { exec } from "child_process";
 import path from "path";
 import fs from "fs";
 
-export async function convertMp4ToGif(inputPath: any) {
+const uploadsDir = path.join(__dirname, '../../../../uploads');
+
+export async function convertMp4ToGif(filename: any) {
     return new Promise((resolve, reject) => {
-        const outputFilename = path.basename(inputPath, path.extname(inputPath)) + ".gif";
-        const outputPath = path.join("uploads", outputFilename);
+        const inputPath = path.join(uploadsDir, filename);
+        const outputFilename = path.basename(path.join(uploadsDir, inputPath), path.extname(inputPath)) + ".gif";
+        const outputPath = path.join(uploadsDir, outputFilename);
         
         const command = `ffmpeg -i ${inputPath} -vf "fps=10,scale=320:-1:flags=lanczos" -y ${outputPath}`;
         const process = exec(command);

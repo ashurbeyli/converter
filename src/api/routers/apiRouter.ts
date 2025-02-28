@@ -1,12 +1,10 @@
 // Libraries
 import express from 'express';
-import rateLimit from "express-rate-limit";
+import rateLimit from 'express-rate-limit';
+import axios from 'axios';
 // Configs
 import { upload } from '../config/uploadConfig';
-// Services
-import { convertMp4ToGif } from '../utils/converter';
 // Utils
-// import { broadcast } from '../utils/websocket'; // TODO: add socket feature
 
 
 const apiRouter = express.Router();
@@ -25,11 +23,14 @@ apiRouter.post('/convert-video', limiter, upload.single("file"), async (req, res
     }
     
     try {
-        const outputFilename = await convertMp4ToGif(req.file.path);
-        // broadcast({ status: "completed", file: outputFilename });
-        return res.json({ success: true, file: outputFilename });
+        const response = await axios.get('http://localhost:3001/workers/converter', {
+            params: {
+                filename: req.file.filename
+            }
+        })
+        return res.status(200).json(response?.data);
     } catch (error: any) {
-        // broadcast({ status: "error", message: error?.message });
+        console.log(error);
         return res.status(500).json({ error: "Conversion failed" });
     }
 })
