@@ -4,9 +4,9 @@ import rateLimit from 'express-rate-limit';
 import axios from 'axios';
 // Configs
 import { upload } from '../config/uploadConfig';
-// Utils
 
-
+// Constants
+const WORKER_BASE_URL = process.env['NODE_ENV'] === 'production' ? 'http://worker:3001' : 'http://localhost:3001';
 const apiRouter = express.Router();
 
 // Only for this endpoint otherwise could be extracted into config
@@ -24,7 +24,7 @@ apiRouter.post('/convert-video', limiter, upload.single("file"), async (req, res
     
     try {
         // TODO: later extract hardcoded worker url into env variables
-        const response = await axios.get('http://worker:3001/workers/converter', {
+        const response = await axios.get(`${WORKER_BASE_URL}/workers/converter`, {
             params: {
                 filename: req.file.filename
             }

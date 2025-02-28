@@ -2,8 +2,10 @@ import { exec } from "child_process";
 import path from "path";
 import fs from "fs";
 
-// const uploadsDir = path.join(__dirname, '../../../../uploads'); // TODO: use uploadDir from env variables
-const uploadsDir = "/app/uploads";
+// TODO: use uploadDir from env variables later
+const uploadsDir = process.env['NODE_ENV'] === 'production' ? 
+    '/app/uploads' :
+    path.join(__dirname, '../../../../uploads');
 
 export async function convertMp4ToGif(filename: any) {
     return new Promise((resolve, reject) => {

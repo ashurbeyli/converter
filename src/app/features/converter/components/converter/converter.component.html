@@ -1,0 +1,22 @@
+<div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold text-center mb-4">MP4 to GIF Converter</h2>
+    <app-file-uploader (fileSelected)="setFile($event)"></app-file-uploader>
+    
+    @if (file() && !convertedFile()){
+        <app-video-previewer [file]="file()!"></app-video-previewer>
+        @if (hasError) {
+            <div class="my-2"><app-alert [message]="'An error occurred!'" [type]="'error'"></app-alert></div>
+        }
+        <button 
+            (click)="convertToGif()" 
+            class="mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
+            [disabled]="isUploading"
+        >
+            {{isUploading ? 'Converting...' : 'Convert to GIF'}}
+        </button>
+    }
+
+    @if (convertedFile()) {
+        <app-result [convertedFile]="convertedFile()!"></app-result>
+    }
+</div>

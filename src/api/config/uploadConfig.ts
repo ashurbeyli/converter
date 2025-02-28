@@ -3,7 +3,8 @@ import path from "path";
 import fs from "fs";
 
 // Define upload directory
-const uploadDir = "/app/uploads";
+const uploadDir = process.env['NODE_ENV'] === 'production' ? '/app/uploads' : 'uploads';
+// TODO: find out better place
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -21,5 +22,5 @@ const storage = multer.diskStorage({
 // File upload settings
 export const upload = multer({
     storage,
-    limits: { fileSize: 500 * 1024 * 1024 }, // 500MB limit
+    limits: { fileSize: 500 * 1024 * 1024 }, // TODO: extract into config/constants
 });

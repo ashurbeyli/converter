@@ -1,0 +1,9 @@
+<div class="mt-4">
+    <h3 class="text-lg font-semibold">Preview:</h3>
+    @if (file) {
+        <video controls class="w-full rounded-lg shadow">
+        <source [src]="videoUrl" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    }
+</div>

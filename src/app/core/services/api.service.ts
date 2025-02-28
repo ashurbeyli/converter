@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+    // TODO: use from env variables
     url = 'http://localhost:4200/api/convert-video';
 
     async convertVideo(file: File): Promise<any> {
