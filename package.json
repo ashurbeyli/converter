@@ -1,5 +1,5 @@
 {
-  "name": "converter-client",
+  "name": "converter",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:converter_client": "node dist/converter_client/server/server.mjs"
+    "serve:ssr:converter": "PORT=4200 node dist/converter/server/server.mjs"
   },
   "private": true,
   "dependencies": {

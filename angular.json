@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "converter_client": {
+    "converter": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/converter_client",
+            "outputPath": "dist/converter",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "converter_client:build:production"
+              "buildTarget": "converter:build:production"
             },
             "development": {
-              "buildTarget": "converter_client:build:development"
+              "buildTarget": "converter:build:development"
             }
           },
           "defaultConfiguration": "development"

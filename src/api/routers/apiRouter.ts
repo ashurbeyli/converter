@@ -23,7 +23,8 @@ apiRouter.post('/convert-video', limiter, upload.single("file"), async (req, res
     }
     
     try {
-        const response = await axios.get('http://localhost:3001/workers/converter', {
+        // TODO: later extract hardcoded worker url into env variables
+        const response = await axios.get('http://worker:3001/workers/converter', {
             params: {
                 filename: req.file.filename
             }

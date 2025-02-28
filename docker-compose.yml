@@ -1,0 +1,23 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      - worker
+
+  worker:
+    build:
+      context: .
+      dockerfile: src/workers/converter/Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - uploads:/app/uploads
+
+volumes:
+  uploads:
