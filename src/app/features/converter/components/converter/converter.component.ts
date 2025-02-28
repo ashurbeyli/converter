@@ -4,7 +4,7 @@ import { Component, inject, signal } from '@angular/core';
 // Components
 import { FileUploaderComponent } from '../../../../shared/components/file-uploader/file-uploader.component';
 import { VideoPreviewerComponent } from '../../../../shared/components/video-previewer/video-previewer.component';
-import { ResultComponent } from '../result.component';
+import { ResultComponent } from '../result/result.component';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 
 // Services

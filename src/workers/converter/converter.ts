@@ -28,5 +28,5 @@ app.get('/workers/converter', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Converter Worker is running on port ${PORT}`);
+    console.log(`Converter Worker is running on port ${PORT} with env: ${process.env['NODE_ENV']}`);
 });

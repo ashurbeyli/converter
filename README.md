@@ -1,6 +1,12 @@
-# ConverterClient
+# Project Overview
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+This project is designed for converting **MP4 files to GIF**. It consists of an **Angular** frontend, an **Express.js** backend, and a **worker** service running in a separate container, all orchestrated with **Docker** and **Docker Swarm**.
+
+## Project Structure
+
+- **Frontend**: Built with Angular, located in the root directory.
+- **Backend**: Built with Express.js, also in the root directory. You can find `api` methods inside `src/api` folder.
+- **Worker**: A separate TypeScript-based service or worker is located in `src/workers/converter`, running in its own Docker container and managed by Docker Swarm.
 
 ## Development server
 
@@ -12,53 +18,42 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Also you need to run the worker:
 
 ```bash
-ng generate component component-name
+npm install -g ffmpeg
+cd src/workers/converter
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+If `npm start` does not work, please try
 
 ```bash
-ng generate --help
+npm install -g ts-node
+ts-node converter.ts
 ```
 
-## Building
+## Docker Setup
 
-To build the project run:
+The project uses **Docker** to containerize both the frontend, backend, and worker services, with **Docker Swarm** to manage and scale the worker service.
+
+To run `production` build:
 
 ```bash
-ng build
+docker-compose build
+
+docker swarm init
+
+docker stack deploy -c docker-compose.yml converter_app
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## What can be improved
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-
-
-## Global installs (just for note)
-- ffmpeg (file conversion)
+- We could use message queue systems instead of http call for workers (RabbitMQ)
+- Error handling could be improved
+- Validation for mp4 file size, dimensions and length on the worker
+- Websocket can be added for real-time upload/conversion progress bar
+- More unit tests, as well as integration and E2E tests can be added
+- We can have separate express.js Backend/API server
+- Enviroment variables could be used for PORT, UploadDir, ImageUrls etc. 
+- ...
