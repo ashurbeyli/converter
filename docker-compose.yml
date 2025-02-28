@@ -1,23 +1,34 @@
 services:
-  server:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "4200:4200"
-    volumes:
-      - uploads:/app/uploads
-    depends_on:
-      - worker
+    server:
+        image: server-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "4200:4200"
+        deploy:
+            replicas: 1  # Only one instance of Angular + Express
+            restart_policy:
+                condition: on-failure
+        networks:
+            - app_network
+        volumes:
+            - uploads:/app/uploads
+    worker:
+        image: worker-app
+        build:
+            context: .
+            dockerfile: src/workers/converter/Dockerfile
+        deploy:
+            replicas: 5  # 5 worker instances
+            restart_policy:
+                condition: on-failure
+        networks:
+            - app_network
+        volumes:
+            - uploads:/app/uploads
 
-  worker:
-    build:
-      context: .
-      dockerfile: src/workers/converter/Dockerfile
-    ports:
-      - "3001:3001"
-    volumes:
-      - uploads:/app/uploads
-
+networks:
+    app_network:
 volumes:
-  uploads:
+    uploads:

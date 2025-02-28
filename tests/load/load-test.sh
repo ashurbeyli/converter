@@ -1,7 +1,7 @@
 #!/bin/bash
 
 URL="http://localhost:4200/api/convert-video"
-NUM_REQUESTS=100
+NUM_REQUESTS=1000
 FILE_PATH="test.mp4"
 
 echo "Starting Load Test with $NUM_REQUESTS requests to $URL..."
