@@ -25,6 +25,9 @@ export class ConverterComponent {
     
     setFile(selectedFile: File) {
         this.file.set(selectedFile);
+        // When user selects another file error or previous result disappears
+        this.convertedFile.set(null);
+        this.hasError = false;
     }
     
     async convertToGif() {
