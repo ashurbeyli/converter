@@ -14,4 +14,4 @@ RUN tsc --project /app/src/workers/converter/tsconfig.json
 EXPOSE 3001
 ENV NODE_ENV=production
 
-CMD ["node", "src/workers/converter/dist/converter.js"]
+CMD ["node", "src/workers/converter/dist/index.js"]

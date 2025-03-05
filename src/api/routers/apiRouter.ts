@@ -1,21 +1,22 @@
 // Libraries
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import axios from 'axios';
 // Configs
 import { upload } from '../config/uploadConfig';
+// RabbitMQ
+import { publishConversionJob } from '../rabbitMQ/queue/publishConversionJob';
+// Redis
+import { getConversionJob } from '../redis/stores/conversionJobStore';
+import { subscribeForJob } from '../redis/subscribers/subscripeForJob';
 
-// Constants
-const WORKER_BASE_URL = process.env['NODE_ENV'] === 'production' ? 'http://worker:3001' : 'http://localhost:3001';
+
 const apiRouter = express.Router();
-
 // Only for this endpoint otherwise could be extracted into config
 const limiter = rateLimit({
     windowMs: 1 * 60 * 1000,
     max: 1000,
     message: "Too many requests, please try again later.",
 });
-  
 
 apiRouter.post('/convert-video', limiter, upload.single("file"), async (req, res) => {
     if (!req.file) {
@@ -23,18 +24,39 @@ apiRouter.post('/convert-video', limiter, upload.single("file"), async (req, res
     }
     
     try {
-        // TODO: later extract hardcoded worker url into env variables
-        const response = await axios.get(`${WORKER_BASE_URL}/workers/converter`, {
-            params: {
-                filename: req.file.filename
-            }
-        })
-        return res.status(200).json(response?.data);
+        const data = await publishConversionJob(req.file.filename);
+        
+        return res.status(200).json({success: true, data});
     } catch (error: any) {
         console.log(error);
         return res.status(500).json({ error: "Conversion failed" });
     }
 })
+
+apiRouter.get('/convert-video/status/:jobId', async (req, res) => {
+    const jobId = req.params.jobId;
+
+    try {
+        const job = await getConversionJob(jobId);
+
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
+        }
+
+        if (job.status === 'completed') {
+            return res.json({data: job});
+        }
+
+        // Waiting for conversion data change for long polling
+        const updatedData = await subscribeForJob(job)
+
+        return res.json({ data: updatedData });
+    } catch (error) {
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 
 apiRouter.get('/health-check', (req, res) => res.send('healthy'));
 

@@ -1,4 +1,24 @@
 services:
+    # RabbitMQ service
+    rabbitmq:
+        image: rabbitmq:management
+        ports:
+            - "5672:5672"  # RabbitMQ communication port
+            - "15672:15672" # RabbitMQ management UI (accessible in the browser)
+        networks:
+            - app_network
+        volumes:
+            - rabbitmq_data:/var/lib/rabbitmq
+
+    # Redis service
+    redis:
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+        networks:
+            - app_network
+        volumes:
+            - redis_data:/data
     server:
         image: server-app
         build:
@@ -14,6 +34,9 @@ services:
             - app_network
         volumes:
             - uploads:/app/uploads
+        environment:
+            - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+            - REDIS_URL=redis://redis:6379
     worker:
         image: worker-app
         build:
@@ -27,8 +50,13 @@ services:
             - app_network
         volumes:
             - uploads:/app/uploads
-
+        environment:
+            - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+            - REDIS_URL=redis://redis:6379
+    
 networks:
     app_network:
 volumes:
     uploads:
+    rabbitmq_data:
+    redis_data:

@@ -1,0 +1,21 @@
+<div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-lg space-y-4">
+    <!-- Job ID and Status -->
+    <div class="flex items-center justify-between">
+      <div class="text-lg font-semibold text-gray-800">Your conversion status:</div>
+      <div class="text-xl font-medium">
+        <span 
+          [ngClass]="{
+            'bg-yellow-300 text-yellow-800': job?.status === 'processing',
+            'bg-green-300 text-green-800': job?.status === 'completed',
+            'bg-red-300 text-red-800': job?.status === 'failed'
+          }"
+          class="px-4 py-2 rounded-full capitalize"
+        >
+          {{ job?.status }}
+        </span>
+      </div>
+    </div>
+  
+    <app-result  *ngIf="job.outputFilename" [convertedFile]="job.outputFilename"></app-result>
+</div>
+  

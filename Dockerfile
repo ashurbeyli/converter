@@ -9,6 +9,7 @@ COPY . ./
 RUN npm run build --prod
 
 EXPOSE 4200
+
 ENV NODE_ENV=production
 
 CMD ["npm", "run", "serve:ssr:converter"]

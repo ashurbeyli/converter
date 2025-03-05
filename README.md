@@ -49,11 +49,11 @@ docker stack deploy -c docker-compose.yml converter_app
 
 ## What can be improved
 
-- We could use message queue systems instead of http call for workers (RabbitMQ)
 - Error handling could be improved
 - Validation for mp4 file size, dimensions and length on the worker
 - Websocket can be added for real-time upload/conversion progress bar
 - More unit tests, as well as integration and E2E tests can be added
+- Add more typescript Types instead of using any
 - We can have separate express.js Backend/API server
 - Enviroment variables could be used for PORT, UploadDir, ImageUrls etc. 
 - ...
